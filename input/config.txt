@@ -1,0 +1,7 @@
+[S3]
+aws-key=key
+aws-secret=secret
+[Bloom]
+global-file-name=abac
+local-file-name=defa
+
