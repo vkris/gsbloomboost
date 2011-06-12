@@ -1,6 +1,7 @@
 [S3]
 aws-key=key
 aws-secret=secret
+s3-home-dir=generalsentiment/vivek/gsbloomboost/
 [Bloom]
 global-file-name=abac
 local-file-name=defa
