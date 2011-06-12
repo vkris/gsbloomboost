@@ -5,4 +5,5 @@ s3-home-dir=generalsentiment/vivek/gsbloomboost/
 [Bloom]
 global-file-name=abac
 local-file-name=defa
+local-dir=/Users/vivekris/GS/code/gsbloomboost/input/
 
