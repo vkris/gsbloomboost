@@ -45,18 +45,28 @@ class Bloom:
         """ Save the bloom file
         """
         pass
-    def merge(self, merge_filer):
-        self.bloom_filter.union(merge_filter)
+    def merge(self, merge_filter):
         """ Basically a union of two bloom filters.
         """
+        self.bloom_filter.union(merge_filter.get_bloom_instance())
         pass
 
+    def get_bloom_instance(self):
+        """
+        Returns the bloom filter instance for merging
+        """
+        return self.bloom_filter
 
+# Testing code. 
 if __name__ == '__main__':
-    bf = Bloom("/tmp/test.bloom")
+    bf = Bloom("/tmp/test11.bloom")
     bf.add_elements(['apple','orange'])
     print bf.has_element('apple')
-    print bf.has_element('test')
+    print bf.has_element('teste1')
 
-    bf2 = Bloom("/tmp/test2.bloom")
+    bf2 = Bloom("/tmp/test21.bloom")
+    bf2.add_elements(['teste1'])
+    bf.merge(bf2)
+    print bf.has_element('teste1')
+
 
