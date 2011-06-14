@@ -11,7 +11,8 @@ class Entity:
 
     # An inverted index for searching entities.
     lookup = {}
-    bucket_list = []
+    bucket_list = []  # This should ideally be a set
+    bucket_lookup = {}
 
     def __init__(self):
         """ 
@@ -21,6 +22,8 @@ class Entity:
         The resultant hash if of hte form -id->[list of elements]
         """
         self.create_inverted_index()
+        self.create_bucket_lookup()
+        print self.lookup
 
         
     def create_inverted_index(self):
@@ -33,7 +36,14 @@ class Entity:
             self.bucket_list.append(entities[0])
             for entity in entities[1:]: # First element is the bucket name
                 # entity points to a bloom filter object.
-                self.lookup[entity] = Bloom("/tmp/"+entities[0]+".bloom")
+                self.lookup[entity.strip()] = entities[0]
+
+    def create_bucket_lookup(self):
+        """
+        Mapping between entity and blooom fileter object
+        """
+        for element in self.bucket_list:
+            self.bucket_lookup[element] = Bloom("/tmp/"+element+".bloom")
 
     def get_elements(self):
         """
@@ -48,8 +58,25 @@ class Entity:
             return lookup[entity]
         except KeyError: 
             return default
+    
+    def add_to_filter(self, element, user_name):
+        try:
+            entity = self.lookup[element]
+            bf = self.bucket_lookup[entity]
+            bf.add_elements(user_name)
+            print "Adding to filter"
+        except KeyError:
+            print "Kery Error"
+            pass
+
+    def save_all(self):
+        for bf in self.bucket_lookup.itervalues():
+            bf.close()
 
 
 if __name__ == "__main__":
-    Entity()
+    e = Entity()
+    e.add_to_filter("Porsche","sdfs")
+    e.save_all()
+
 
