@@ -17,6 +17,7 @@ class BloomConfig:
         self.config['global_file_name'] = config.get('Bloom','global-file-name')
         self.config['local_file_name']  = config.get('Bloom','local-file-name')
         self.config['local_dir']  = config.get('Bloom','local-dir')
+        self.config['template_file_name']  = config.get('Bloom','template-file-name')
 
     @classmethod
     def read_config_data(self):
