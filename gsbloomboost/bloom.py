@@ -34,6 +34,10 @@ class Bloom:
     def add_elements(self,elements):
         """ Add element(s) to this file name
         """
+        if (isinstance(elements,basestring)):
+            ## Just a single string
+            self.bloom_filter.add(elements)
+            return
         for element in elements:
             self.bloom_filter.add(element)
     
