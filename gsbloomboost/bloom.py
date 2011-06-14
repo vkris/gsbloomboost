@@ -32,7 +32,7 @@ class Bloom:
             self.bloom_filter = bf.copy_template(self.file_name)
             
     def add_elements(self,elements):
-        """ Add an element to this file name
+        """ Add element(s) to this file name
         """
         for element in elements:
             self.bloom_filter.add(element)

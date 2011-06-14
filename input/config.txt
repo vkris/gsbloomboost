@@ -7,4 +7,7 @@ global-file-name=abac
 local-file-name=defa
 local-dir=/Users/vivekris/GS/code/gsbloomboost/input/
 template-file-name=/Users/vivekris/GS/code/gsbloomboost/input/template.bloom
+[Entity]
+entities-file=/Users/vivekris/GS/code/gsbloomboost/input/entities.csv
+default-entity=-1
 

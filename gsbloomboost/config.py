@@ -19,6 +19,9 @@ class BloomConfig:
         self.config['local_dir']  = config.get('Bloom','local-dir')
         self.config['template_file_name']  = config.get('Bloom','template-file-name')
 
+        self.config['entities_file']  = config.get('Entity','entities-file')
+        self.config['default_entity']  = config.get('Entity','default-entity')
+
     @classmethod
     def read_config_data(self):
         """ method to read the configuration data"""
