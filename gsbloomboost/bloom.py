@@ -18,18 +18,24 @@ class Bloom:
             else download from s3 and create a new file using the template.
             Set the class variale to this file name
         """
+        # Check if it already exists:
+        if (util.if_file_exists(self.file_name)):
+            self.bloom_filter = pybloomfilter.BloomFilter.open(self.file_name)    
         # Check if the template exists
-        if (util.if_file_exists(self.template_file)):
+        elif (util.if_file_exists(self.template_file)):
             # Open the existing file
             bf = pybloomfilter.BloomFilter.open(self.template_file)
             # Create a copy of this template..
             bf.copy_template(self.file_name)
             self.bloom_filter = bf
+            #bf.close()
+            
         else:
             # Create a new bloom filter file and save its as template
             bf = pybloomfilter.BloomFilter(100000, 0.1, self.template_file)
             # Copy the template to a new file
             self.bloom_filter = bf.copy_template(self.file_name)
+            #bf.close()
             
     def add_elements(self,elements):
         """ Add element(s) to this file name
@@ -45,15 +51,15 @@ class Bloom:
         # To check if an element is available in the filter..
         return element in self.bloom_filter
 
-    def save_bloom(self):
-        """ Save the bloom file
+    def close(self):
+        """ Save and close the bloom file
         """
-        pass
+        self.bloom_filter.close()
+        
     def merge(self, merge_filter):
         """ Basically a union of two bloom filters.
         """
         self.bloom_filter.union(merge_filter.get_bloom_instance())
-        pass
 
     def get_bloom_instance(self):
         """
