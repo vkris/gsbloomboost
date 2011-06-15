@@ -22,6 +22,8 @@ class BloomConfig:
         self.config['entities_file']  = config.get('Entity','entities-file')
         self.config['default_entity']  = config.get('Entity','default-entity')
 
+        self.config['sources_file'] = config.get('Sources','sources-file')
+
     @classmethod
     def read_config_data(self):
         """ method to read the configuration data"""

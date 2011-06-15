@@ -66,7 +66,7 @@ class Entity:
             bf.add_elements(user_name)
             print "Adding to filter"
         except KeyError:
-            print "Kery Error"
+            print "Not adding to filter :  No Match"
             pass
 
     def save_all(self):
@@ -77,6 +77,12 @@ class Entity:
 if __name__ == "__main__":
     e = Entity()
     e.add_to_filter("Porsche","sdfs")
+    e.add_to_filter("Porsche","jdev")
+    e.add_to_filter("Porsche","surya")
+    e.add_to_filter("Honda","surya")
+    e.add_to_filter("coca-la","surya")
+
+
     e.save_all()
 
 

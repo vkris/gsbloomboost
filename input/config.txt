@@ -10,4 +10,5 @@ template-file-name=/Users/vivekris/GS/code/gsbloomboost/input/template.bloom
 [Entity]
 entities-file=/Users/vivekris/GS/code/gsbloomboost/input/entities.csv
 default-entity=-1
-
+[Sources]
+sources-file=/Users/vivekris/GS/code/gsbloomboost/input/sources.xml
