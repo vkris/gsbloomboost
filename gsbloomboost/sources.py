@@ -53,20 +53,37 @@ class Sources:
 
     def validate(self):
         ## Reports if xml file and csv file are in sync
-        csv_elements =  [ line.split(',')[0] for line in file(self.csv_file) if not line.startswith('#') ]
-        xml_elements = self.parse_elements()
+        csv_elements, xml_elements = self.get_csv_elements(), self.get_xml_elements("title")
         # Returns if both the lists are same. 
         return set(csv_elements) == set(xml_elements) 
 
+    def get_csv_elements(self):
+        elements =  [ line.split(',')[0] for line in file(self.csv_file) if not line.startswith('#') ]
+        return elements
 
-    def parse_elements(self):
-        tree = ETree.ElementTree(file=xml_file)
-        nodes = tree.findall('source/title')
+    def get_xml_elements(self, tag_name):        
+        tree = ETree.ElementTree(file=self.xml_file)
+        nodes = tree.findall('source/' + tag_name)
         elements = [ element.text for element in nodes ] 
         return elements
 
     def update(self):
-        pass
+        if ( not self.validate()):
+           csv_elements, xml_elements = self.get_csv_elements(), self.get_xml_elements("title")
+           diff = set(csv_elements) - set(xml_elements)
+           xml_ids_str = self.get_xml_elements("id")        
+           # Convert string to integer
+           xml_ids = [ int(idx) for idx in xml_ids_str ]  
+           
+           # min because we are dealing with negative integers.
+           self.id1 = min(xml_ids)   
+
+           self.root = ETree.ElementTree(file=self.xml_file).getroot()
+           for element in diff:
+               self.add_node(element)
+
+           self.save()
+            
 
 
 if __name__ == '__main__':
@@ -77,4 +94,6 @@ if __name__ == '__main__':
 
     s = Sources(csv_file, xml_file)
     #s.generate()
+    print s.validate()
+    s.update()
     print s.validate()
