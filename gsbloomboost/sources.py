@@ -19,18 +19,20 @@ class Sources:
     def generate(self):
         # Get the entities from the csv file
         elements = [ line.split(',')[0] for line in file(self.csv_file) if not line.startswith('#') ] 
-        self.generate_xml(elements)
+        tags = [ line.strip().split(',')[1:] for line in file(self.csv_file) if not line.startswith('#') ]
+        print tags
+        self.generate_xml(elements,tags)
         self.save()
-        pass
 
-    def generate_xml(self, elements):
+    def generate_xml(self, elements,tags):
         self.root     = ETree.Element('sources')
         self.root.attrib = { 'xmlns:xsi' : 'http://www.w3.org/2001/XMLSchema-instance' } 
 #        ETree.register_namespace('xsi','http://www.w3.org/2001/XMLSchema-instance')
-        for element in elements:
-            self.add_node(element)
+        for element,tagz in zip(elements,tags):
+            print element, tagz
+            self.add_node(element,tagz)
 
-    def add_node(self,element):
+    def add_node(self,element,tags):
         source   = ETree.SubElement(self.root, "source")
         iid      = ETree.SubElement(source,"id")
         self.id1 = self.id1 - 1
@@ -44,6 +46,11 @@ class Sources:
 
         internal_name  = ETree.SubElement(source,"internal_name")
         internal_name.text = "twitter_users_category"
+
+        tags_xml = ETree.SubElement(source, "tags")
+        for tag in tags:
+            tag_xml = ETree.SubElement(tags_xml, "tag")
+            tag_xml.text = tag
 
     def save(self):
         tree = ETree.ElementTree(self.root)
@@ -80,7 +87,9 @@ class Sources:
 
            self.root = ETree.ElementTree(file=self.xml_file).getroot()
            for element in diff:
-               self.add_node(element)
+               tags = [ line.strip().split(',')[1:] for line in file(self.csv_file) if not line.startswith('#') and line.startswith(element) ]
+               print tags
+               self.add_node(element,tags[0])
 
            self.save()
             
