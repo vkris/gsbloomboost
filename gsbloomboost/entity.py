@@ -5,22 +5,26 @@ class Entity:
     """
     A class to manipulate the charlotte's 400 list.
     """
-    conf = BloomConfig().read_config_data()
-    entities_file = conf['entities_file']
-    default = conf['default_entity']
+
 
     # An inverted index for searching entities.
+    entities_file = None
+    sources_file = None
+    default = None
     lookup = {}
     bucket_list = []  # This should ideally be a set
     bucket_lookup = {}
 
-    def __init__(self):
+    def __init__(self,entities_file, sources_file):
         """ 
         Generate an inverted index here.
         Should ideally use two files, the xml file containing negative Ids
         and the charlott's list
         The resultant hash if of hte form -id->[list of elements]
         """
+        self.entities_file = entities_file
+        self.sources_file  = sources_file
+        self.default = default
         self.create_inverted_index()
         self.create_bucket_lookup()
         print self.lookup
@@ -75,7 +79,13 @@ class Entity:
 
 
 if __name__ == "__main__":
-    e = Entity()
+
+    conf = BloomConfig().read_config_data()
+    entities_file = conf['entities_file']
+    sources_file = conf['sources_file']
+    default = conf['default_entity']
+    
+    e = Entity(entities_file, sources_file)
     e.add_to_filter("Porsche","sdfs")
     e.add_to_filter("Porsche","jdev")
     e.add_to_filter("Porsche","surya")
