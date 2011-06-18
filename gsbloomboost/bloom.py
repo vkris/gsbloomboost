@@ -79,4 +79,11 @@ if __name__ == '__main__':
     bf.merge(bf2)
     print bf.has_element('teste1')
 
+    bf3 = Bloom("../input//Cars.bloom")
+    #bf.merge(bf2)
+    print bf3.has_element('surya')
+    bf3.add_elements(['surya'])
+    print bf3.has_element('surya')
+
+
 
