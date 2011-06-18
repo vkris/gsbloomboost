@@ -1,5 +1,8 @@
+#import gsbloomboost 
 from config import BloomConfig
 from bloom import Bloom
+#import gsbloomboost.config.BloomConfig
+#import gsbloomboost.bloom.Bloom
 
 class Entity:
     """
@@ -24,10 +27,10 @@ class Entity:
         """
         self.entities_file = entities_file
         self.sources_file  = sources_file
-        self.default = default
+#        self.default = default
         self.create_inverted_index()
         self.create_bucket_lookup()
-        print self.lookup
+        #print self.lookup
 
         
     def create_inverted_index(self):
@@ -47,12 +50,13 @@ class Entity:
         Mapping between entity and blooom fileter object
         """
         for element in self.bucket_list:
-            self.bucket_lookup[element] = Bloom("/tmp/"+element+".bloom")
+            self.bucket_lookup[element] = Bloom("../input/filters/"+element+".bloom")
 
     def get_elements(self):
         """
         Get the list of elements for a particular id
         """
+        pass
 
     def get_bucket_name(self, entity):
         """
