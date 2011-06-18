@@ -3,5 +3,6 @@ input/template.bloom
 input/sources*
 input/temp*
 input/filters
+*.swo
 *.swp
 *.pyc
