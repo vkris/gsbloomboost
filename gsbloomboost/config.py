@@ -18,6 +18,7 @@ class BloomConfig:
         self.config['local_file_name']  = config.get('Bloom','local-file-name')
         self.config['local_dir']  = config.get('Bloom','local-dir')
         self.config['template_file_name']  = config.get('Bloom','template-file-name')
+        self.config['local_filter_dir']  = config.get('Bloom','local-filter-dir')
 
         self.config['entities_file']  = config.get('Entity','entities-file')
         self.config['default_entity']  = config.get('Entity','default-entity')
