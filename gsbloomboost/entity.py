@@ -1,6 +1,7 @@
 #import gsbloomboost 
 from config import BloomConfig
 from bloom import Bloom
+import elementtree.ElementTree as ETree
 #import gsbloomboost.config.BloomConfig
 #import gsbloomboost.bloom.Bloom
 
@@ -30,12 +31,14 @@ class Entity:
 #        self.default = default
         self.create_inverted_index()
         self.create_bucket_lookup()
-        #print self.lookup
+        print self.lookup
 
         
     def create_inverted_index(self):
         """
         Create an inverted index based on the file
+        """
+        # Code for entities file is obsolete
         """
         for line in file(self.entities_file):
             if line.startswith('#'): continue
@@ -44,12 +47,35 @@ class Entity:
             for entity in entities[1:]: # First element is the bucket name
                 # entity points to a bloom filter object.
                 self.lookup[entity.strip()] = entities[0]
+        """
+        # Code using the xml fiel
+        tree = ETree.ElementTree(file=self.sources_file)
+        # Get all source elements
+        sources = tree.findall('source')
+        # Parse sources.
+        idd = ""
+        for elements in sources:
+            for element in elements:
+                if ( element.tag == 'title' ):
+                    idd = element.text
+                    ## Append the titles to a list - These are the bucket names.
+                    self.bucket_list.append(idd)
+                elif ( element.tag == 'tags'):
+                    tags = element.findall('tag')
+                    for tag in tags:
+                        text = self.beautify(tag.text)
+                        self.lookup[text] = idd
+
+    def beautify(self, text):
+        return text.strip('"""')
+
 
     def create_bucket_lookup(self):
         """
         Mapping between entity and blooom fileter object
         """
         for element in self.bucket_list:
+            element = '_'.join(element.split())
             self.bucket_lookup[element] = Bloom("../input/filters/"+element+".bloom")
 
     def get_elements(self):
@@ -90,7 +116,7 @@ if __name__ == "__main__":
     default = conf['default_entity']
     
     e = Entity(entities_file, sources_file)
-    e.add_to_filter("Porsche","sdfs")
+    e.add_to_filter("#HappinessTruck","vivek")
     e.add_to_filter("Porsche","jdev")
     e.add_to_filter("Porsche","surya")
     e.add_to_filter("Honda","surya")

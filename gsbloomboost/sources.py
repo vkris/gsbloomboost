@@ -1,6 +1,6 @@
 from config import BloomConfig
 import elementtree.ElementTree as ETree
-import os
+import os, sys
 
 class Sources:
     """
@@ -18,18 +18,24 @@ class Sources:
 
     def generate(self):
         # Get the entities from the csv file
-        elements = [ line.split(',')[0] for line in file(self.csv_file) if not line.startswith('#') ] 
-        tags = [ line.strip().split(',')[1:] for line in file(self.csv_file) if not line.startswith('#') ]
-        print tags
+        self.preprocess_windows_file()
+        # rstrip to remove trailing commas.
+        elements = [ line.strip().rstrip(',').split(',')[0] for line in file(self.csv_file) if not line.startswith('#') ] 
+        tags = [ line.strip().rstrip(',').split(',')[1:] for line in file(self.csv_file) if not line.startswith('#') ]
         self.generate_xml(elements,tags)
         self.save()
+
+    def preprocess_windows_file(self):
+        # Remove the ctrl M character 
+        os.system('tr "\015" "\n" <' + self.csv_file + ' > ../input/tmp_csv.csv')
+        os.system('mv ../input/tmp_csv.csv ' + csv_file)
+
 
     def generate_xml(self, elements,tags):
         self.root     = ETree.Element('sources')
         self.root.attrib = { 'xmlns:xsi' : 'http://www.w3.org/2001/XMLSchema-instance' } 
 #        ETree.register_namespace('xsi','http://www.w3.org/2001/XMLSchema-instance')
         for element,tagz in zip(elements,tags):
-            print element, tagz
             self.add_node(element,tagz)
 
     def add_node(self,element,tags):
@@ -88,7 +94,6 @@ class Sources:
            self.root = ETree.ElementTree(file=self.xml_file).getroot()
            for element in diff:
                tags = [ line.strip().split(',')[1:] for line in file(self.csv_file) if not line.startswith('#') and line.startswith(element) ]
-               print tags
                self.add_node(element,tags[0])
 
            self.save()
@@ -102,7 +107,7 @@ if __name__ == '__main__':
     xml_file = conf['sources_file']
 
     s = Sources(csv_file, xml_file)
-    #s.generate()
-    print s.validate()
-    s.update()
-    print s.validate()
+    s.generate()
+    #print s.validate()
+    #s.update()
+    #print s.validate()
