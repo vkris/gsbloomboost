@@ -2,6 +2,7 @@
 import pybloomfilter
 import util
 from config import BloomConfig
+import os
 
 class Bloom:
     file_name = ""
@@ -9,9 +10,12 @@ class Bloom:
     conf = BloomConfig().read_config_data()
     template_file = conf['template_file_name']
     
-    def __init__(self, file_name):
-        self.file_name = file_name
-        self.create_bloom()
+    def __init__(self, file_name=""):
+        if not file_name:
+            pass
+        else:
+            self.file_name = file_name
+            self.create_bloom()
 
     def create_bloom(self):
         """ If global file exists create a new file using the template 
@@ -67,6 +71,30 @@ class Bloom:
         """
         return self.bloom_filter
 
+    def search(self,folder_name,entity):
+        """
+        Searches across all the bloom filters. 
+        Returns a number - This number implies the number of files that contain the entity
+        """
+        walk = os.walk(folder_name)
+        info = walk.next()
+        ddir = info[0]
+        sdir = info[1]
+        files = info[2]
+
+        result_count = 0
+        for file in files:
+            # Including the directory
+            file_name = ddir + file 
+            bf = pybloomfilter.BloomFilter.open(file_name)
+            result_count = result_count + 1 if entity in bf else result_count
+        print result_count
+
+#        for filee in files:
+#            for f in filee:
+#                print f
+
+
 # Testing code. 
 if __name__ == '__main__':
     bf = Bloom("/tmp/test11.bloom")
@@ -74,16 +102,18 @@ if __name__ == '__main__':
     print bf.has_element('apple')
     print bf.has_element('teste1')
 
-    bf2 = Bloom("/tmp/test21.bloom")
+    bf2 = Bloom("../input/filters/test21.bloom")
     bf2.add_elements(['teste1'])
+
     bf.merge(bf2)
     print bf.has_element('teste1')
 
-    bf3 = Bloom("../input//Cars.bloom")
+    bf3 = Bloom("../input/filters/Cars.bloom")
     #bf.merge(bf2)
     print bf3.has_element('surya')
-    bf3.add_elements(['surya'])
+    bf3.add_elements(['teste1'])
     print bf3.has_element('surya')
 
+    bf.search("/Users/vivekris/GS/code/gsbloomboost/input/filters/","teste1")
 
 
