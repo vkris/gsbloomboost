@@ -21,6 +21,7 @@ def main(author, tweet):
         e.add_to_filter(word, author)
 
 
+
 if __name__ == "__main__":
     if (len(sys.argv) != 3 ):
         print "Usage: main.py author_name tweet"

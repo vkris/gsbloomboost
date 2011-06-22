@@ -28,6 +28,7 @@ class Bloom:
         # Check if the template exists
         elif (util.if_file_exists(self.template_file)):
             # Open the existing file
+            print "bloom.py : The file does not exist, so creating a new one from template"
             bf = pybloomfilter.BloomFilter.open(self.template_file)
             # Create a copy of this template..
             bf.copy_template(self.file_name)
@@ -88,7 +89,7 @@ class Bloom:
             file_name = ddir + file 
             bf = pybloomfilter.BloomFilter.open(file_name)
             result_count = result_count + 1 if entity in bf else result_count
-        print result_count
+        return result_count
 
 #        for filee in files:
 #            for f in filee:
@@ -114,6 +115,8 @@ if __name__ == '__main__':
     bf3.add_elements(['teste1'])
     print bf3.has_element('surya')
 
+    bf4 = Bloom("../input/filters/Coca-Cola.bloom")
+    print bf4.has_element('vivek')
     bf.search("/Users/vivekris/GS/code/gsbloomboost/input/filters/","teste1")
 
 

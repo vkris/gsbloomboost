@@ -12,7 +12,7 @@ class Entity:
     """
 
     conf = BloomConfig().read_config_data()
-    filter_dir = conf['local_filter_dir']
+    filter_dir = conf['local_lists_dir']
     # An inverted index for searching entities.
     entities_file = None
     sources_file = None
@@ -33,7 +33,7 @@ class Entity:
 #        self.default = default
         self.create_inverted_index()
         self.create_bucket_lookup()
-        print self.lookup
+        #print self.lookup
 
         
     def create_inverted_index(self):
