@@ -16,10 +16,9 @@ def main(author, tweet):
     
     e = Entity(entities_file, sources_file)
     words = get_bag_of_words(tweet)
-    print words
+    #print words
     for word in words:
         e.add_to_filter(word, author)
-#    e.add_to_filter("Porsche","sdfs")
 
 
 if __name__ == "__main__":

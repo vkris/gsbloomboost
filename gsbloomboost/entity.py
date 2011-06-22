@@ -8,9 +8,11 @@ import elementtree.ElementTree as ETree
 class Entity:
     """
     A class to manipulate the charlotte's 400 list.
+    Modified this class not to add elemetns to bloom filter, but to a normal file.
     """
 
-
+    conf = BloomConfig().read_config_data()
+    filter_dir = conf['local_filter_dir']
     # An inverted index for searching entities.
     entities_file = None
     sources_file = None
@@ -38,7 +40,7 @@ class Entity:
         """
         Create an inverted index based on the file
         """
-        # Code for entities file is obsolete
+        # Code using entities file is obsolete
         """
         for line in file(self.entities_file):
             if line.startswith('#'): continue
@@ -57,14 +59,14 @@ class Entity:
         for elements in sources:
             for element in elements:
                 if ( element.tag == 'title' ):
-                    idd = element.text
+                    title = element.text
                     ## Append the titles to a list - These are the bucket names.
-                    self.bucket_list.append(idd)
+                    self.bucket_list.append(title)
                 elif ( element.tag == 'tags'):
                     tags = element.findall('tag')
                     for tag in tags:
                         text = self.beautify(tag.text)
-                        self.lookup[text] = idd
+                        self.lookup[text] = title
 
     def beautify(self, text):
         return text.strip('"""')
@@ -76,7 +78,8 @@ class Entity:
         """
         for element in self.bucket_list:
             element = '_'.join(element.split())
-            self.bucket_lookup[element] = Bloom("../input/filters/"+element+".bloom")
+            #self.bucket_lookup[element] = Bloom(self.filter_dir+"/"+element+".bloom")
+            self.bucket_lookup[element] = open(self.filter_dir+"/"+element+".2bloom","a")
 
     def get_elements(self):
         """
@@ -96,8 +99,10 @@ class Entity:
     def add_to_filter(self, element, user_name):
         try:
             entity = self.lookup[element]
+            print entity, element
             bf = self.bucket_lookup[entity]
-            bf.add_elements(user_name)
+            #bf.add_elements(user_name)
+            bf.write(user_name+"\n")
             print "Adding to filter"
         except KeyError:
             print "Not adding to filter :  No Match"
@@ -117,6 +122,7 @@ if __name__ == "__main__":
     
     e = Entity(entities_file, sources_file)
     e.add_to_filter("#HappinessTruck","vivek")
+    e.add_to_filter("#cocacola","vivekris")
     e.add_to_filter("Porsche","jdev")
     e.add_to_filter("Porsche","surya")
     e.add_to_filter("Honda","surya")
